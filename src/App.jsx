@@ -27,7 +27,15 @@ function App() {
     })
   }
 
-  function handleDeleteTask() { }
+  function handleDeleteTask(id) {
+    setProjectState(prevState => {
+      return {
+        ...prevState,
+        tasks: prevState.tasks.filter(
+          task => task.id !== id)
+      }
+    })
+  }
 
   // invoked when a project is slelected from the projectList in side bar
   function handleSelctedProject(id) {
@@ -88,8 +96,8 @@ function App() {
     project={selectedProject}
     onDelete={handleDeleteProject}
     onAddTask={handleAddTask}
-    onDeleteTask={handleDeleteTask} 
-    tasks={projectState.tasks}/>
+    onDeleteTask={handleDeleteTask}
+    tasks={projectState.tasks} />
 
   if (projectState.selectedProjectId === null) {
     content = <NewProject onAdd={handleAddProject} onCancel={handleCancelAddProject} />
@@ -103,6 +111,7 @@ function App() {
         onStartAddProject={handleStartAddProject}
         projects={projectState.projects}
         onSelectProject={handleSelctedProject}
+        selectedProjectId={projectState.selectedProjectId}
       ></ProjectSidebar>
       {content}
     </main>
