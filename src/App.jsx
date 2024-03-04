@@ -7,8 +7,27 @@ import SelectedProject from "./components/SElectedProject";
 function App() {
   const [projectState, setProjectState] = useState({
     selectedProjectId: undefined,
-    projects: [] //Array of object of project details and id 
+    projects: [], //Array of object of project details and id 
+    tasks: []
   })
+
+  //Handle addition of new task
+  function handleAddTask(text) {
+    setProjectState(prevState => {
+      const taskId = Math.random()
+      const newTask = {
+        text: text,
+        projectId: prevState.selectedProjectId,
+        id: taskId
+      }
+      return {
+        ...prevState,
+        tasks: [...prevState.tasks, newTask]
+      }
+    })
+  }
+
+  function handleDeleteTask() { }
 
   // invoked when a project is slelected from the projectList in side bar
   function handleSelctedProject(id) {
@@ -65,7 +84,12 @@ function App() {
   }
 
   let selectedProject = projectState.projects.find(project => project.id === projectState.selectedProjectId)
-  let content = <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />
+  let content = <SelectedProject
+    project={selectedProject}
+    onDelete={handleDeleteProject}
+    onAddTask={handleAddTask}
+    onDeleteTask={handleDeleteTask} 
+    tasks={projectState.tasks}/>
 
   if (projectState.selectedProjectId === null) {
     content = <NewProject onAdd={handleAddProject} onCancel={handleCancelAddProject} />
